@@ -1,5 +1,5 @@
 /**
- * Resolves an import specifier to a file inside superset-frontend, mirroring
+ * Resolves an import specifier to a file inside target-frontend, mirroring
  * the rules webpack (webpack.config.js) and TypeScript (tsconfig.json) use:
  *
  *   1. relative specifiers          ./x, ../x

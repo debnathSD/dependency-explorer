@@ -1,8 +1,8 @@
 {
-  "name": "superset-frontend-dependency-explorer",
+  "name": "target-frontend-dependency-explorer",
   "version": "1.0.0",
   "private": true,
-  "description": "Live, interactive tree of every file in superset-frontend and how they import each other.",
+  "description": "Live, interactive tree of every file in target-frontend and how they import each other.",
   "type": "module",
   "scripts": {
     "dev": "vite",

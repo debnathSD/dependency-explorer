@@ -210,7 +210,7 @@ export default function App() {
       <div className="fatal">Could not load the dependency graph: {error}</div>
     );
   if (!model || !tree)
-    return <div className="fatal">Scanning superset-frontend…</div>;
+    return <div className="fatal">Scanning target-frontend…</div>;
 
   const outCount = selectedFile
     ? neighbors(model, selectedFile.i, 'out', opts).length

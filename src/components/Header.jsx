@@ -17,7 +17,7 @@ export default function Header({ model, connected, lastUpdate }) {
   return (
     <header className="header">
       <h1>
-        superset-frontend <span className="muted">dependency explorer</span>
+        target-frontend <span className="muted">dependency explorer</span>
       </h1>
       <span className="pill" title={`commit ${payload.commit}`}>
         ⎇ {lastUpdate?.branch || payload.branch || 'no git'}

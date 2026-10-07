@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
-/** superset-frontend, unless overridden with SUPERSET_FRONTEND_DIR. */
+/** target-frontend, unless overridden with SUPERSET_FRONTEND_DIR. */
 export const FRONTEND_ROOT = path.resolve(
   process.env.SUPERSET_FRONTEND_DIR || path.join(here, '../../..'),
 );

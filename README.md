@@ -1,11 +1,11 @@
-# superset-frontend dependency explorer
+# target-frontend dependency explorer
 
-An interactive, **live** map of every file in `superset-frontend/` and how the
+An interactive, **live** map of every file in `target-frontend/` and how the
 files import each other. Built for frontend devs who want to answer
 "what does this file depend on?" and "what breaks if I change it?" without grepping.
 
 ```bash
-cd superset-frontend/tools/dependency-explorer
+cd target-frontend/tools/dependency-explorer
 npm install        # once; this tool has its own dependencies and is not part of the app's workspaces
 npm run dev        # http://localhost:5177   (PORT=xxxx npm run dev to change)
 ```
@@ -31,7 +31,7 @@ can be switched off to see only the runtime, non-test graph.
 
 ## Staying up to date
 
-The dev server watches `superset-frontend/` (chokidar). When files are saved, created, deleted,
+The dev server watches `target-frontend/` (chokidar). When files are saved, created, deleted,
 or the working tree changes through `git checkout` / `pull` / `merge`, it debounces (350 ms),
 re-lists files through git, re-parses **only the files whose mtime/size changed**, re-resolves
 the graph and pushes the result to every open browser tab over Server-Sent Events. The header

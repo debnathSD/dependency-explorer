@@ -1,5 +1,5 @@
 /**
- * GraphStore keeps an in-memory model of superset-frontend:
+ * GraphStore keeps an in-memory model of target-frontend:
  *   - the list of files (git-aware: tracked + untracked, minus .gitignore'd)
  *   - the parsed import references of every source file (cached by mtime+size)
  *   - the resolved file -> file dependency graph
@@ -38,7 +38,7 @@ export function isBinaryPath(file) {
 
 export class GraphStore {
   /**
-   * @param {string} root absolute path of superset-frontend
+   * @param {string} root absolute path of target-frontend
    * @param {{exclude?: string[]}} [options] posix path prefixes (relative to root) to leave out
    */
   constructor(root, options = {}) {
