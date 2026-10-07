@@ -3,9 +3,9 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
-/** target-frontend, unless overridden with SUPERSET_FRONTEND_DIR. */
+/** project root, unless overridden with DEP_EXPLORER_ROOT. */
 export const FRONTEND_ROOT = path.resolve(
-  process.env.SUPERSET_FRONTEND_DIR || path.join(here, '../../..'),
+  process.env.DEP_EXPLORER_ROOT || process.env.FRONTEND_ROOT || path.join(here, '../../..'),
 );
 
 /** Leave the explorer's own sources out of the graph it draws. */

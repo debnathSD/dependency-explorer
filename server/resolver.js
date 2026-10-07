@@ -3,7 +3,7 @@
  * the rules webpack (webpack.config.js) and TypeScript (tsconfig.json) use:
  *
  *   1. relative specifiers          ./x, ../x
- *   2. workspace aliases            @superset-ui/core -> packages/superset-ui-core/src
+ *   2. workspace aliases            @scope/pkg -> packages/pkg/src (when present)
  *   3. tsconfig `paths`             (wildcard patterns)
  *   4. tsconfig `baseUrl` / webpack `modules: [APP_DIR]`
  *                                   'src/components/Foo' -> <root>/src/components/Foo
@@ -60,12 +60,14 @@ export class Resolver {
       (a, b) => b.name.length - a.name.length,
     );
 
-    // Longest alias first so '@superset-ui/core' wins over a shorter prefix.
+    // Longest alias first so longer package names win over shorter prefixes.
     this.aliases = [];
     for (const ws of this.workspaces) {
-      // webpack.config.js: every @superset-ui/* workspace that has a src/
-      // directory is aliased straight to its TypeScript sources.
-      if (ws.name.startsWith('@superset-ui/') && this.hasDir(`${ws.dir}/src`)) {
+      // For workspace packages that expose a `src` folder, alias imports
+      // of the package name to the package's `src` directory (common for
+      // local workspaces that keep sources under `src/`). This mirrors
+      // how many monorepo webpack configs map package names to source.
+      if (this.hasDir(`${ws.dir}/src`)) {
         this.aliases.push({ from: ws.name, to: `${ws.dir}/src` });
       }
     }

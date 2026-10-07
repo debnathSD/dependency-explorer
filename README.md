@@ -1,16 +1,16 @@
-# target-frontend dependency explorer
+# root — Dependency Explorer
 
-An interactive, **live** map of every file in `target-frontend/` and how the
-files import each other. Built for frontend devs who want to answer
-"what does this file depend on?" and "what breaks if I change it?" without grepping.
+An interactive, live map of every file in your project and how files import each other.
+Use this tool to quickly answer "what does this file depend on?" and "what breaks if I change it?"
+without grepping through the codebase.
 
 ```bash
 cd root
-npm install        # once; this tool has its own dependencies and is not part of the app's workspaces
-npm run dev        # http://localhost:5177   (PORT=xxxx npm run dev to change)
+npm install        # once; this tool has its own dependencies
+npm run dev        # http://localhost:5177   (use PORT=xxxx npm run dev to change)
 ```
 
-Needs Node 18+. The first scan takes ~3 s for ~5,300 files.
+Requires Node 18+. Initial scan time depends on project size (a few seconds for medium projects).
 
 ## Using it
 
@@ -47,9 +47,9 @@ with `DEP_EXPLORER_POLL=1 npm run dev`.
   strings and comments are never counted. Captured: `import`, `import type`, `export … from`,
   `import()`, `require()`, `import x = require()`, `import('x').T` types,
   `new URL('./x', import.meta.url)` (workers) and `@import` in `.less/.scss/.css`.
-- **Resolution** mirrors `webpack.config.js` + `tsconfig.json`: relative paths, extension probing
-  (`.ts .tsx .js .jsx …`), directory `index` files, `@superset-ui/*` → `<package>/src`, tsconfig
-  `paths`, `baseUrl` imports (`src/…`, `spec/…`), and other workspace packages via their `package.json`.
+- **Resolution** mirrors typical frontend toolchain rules (webpack / tsconfig): relative paths, extension probing
+  (`.ts .tsx .js .jsx …`), directory `index` files, mapping workspace package names to their source directories when available,
+  tsconfig `paths` and `baseUrl` imports (`src/…`, `spec/…`), and other workspace packages via their `package.json`.
   Everything else is reported as an npm package.
 - **Broken imports** (target file doesn't exist) are listed as *unresolved* rather than silently
   dropped — currently ~25 in the repo, all genuinely missing files (plus git-ignored build output

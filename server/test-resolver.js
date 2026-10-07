@@ -8,8 +8,8 @@ const files = new Set([
   'src/utils/format.ts',
   'src/utils/data.json',
   'spec/helpers/render.tsx',
-  'packages/superset-ui-core/src/index.ts',
-  'packages/superset-ui-core/src/query/index.ts',
+  'packages/sample-org-core/src/index.ts',
+  'packages/sample-org-core/src/query/index.ts',
   'plugins/plugin-chart-table/src/index.ts',
   'packages/blocknote-editor/index.js',
   'packages/blocknote-editor/ai/Panel.tsx',
@@ -17,13 +17,13 @@ const files = new Set([
 ]);
 const workspaces = [
   {
-    name: '@superset-ui/core',
-    dir: 'packages/superset-ui-core',
+    name: '@sample-org/core',
+    dir: 'packages/sample-org-core',
     main: 'lib/index.js',
     module: 'esm/index.js',
   },
   {
-    name: '@superset-ui/plugin-chart-table',
+    name: '@sample-org/plugin-chart-table',
     dir: 'plugins/plugin-chart-table',
     main: 'lib/index.js',
   },
@@ -71,16 +71,16 @@ test('baseUrl-style imports (src/..., spec/...) resolve against the root', () =>
   });
 });
 
-test('@superset-ui/* aliases point at package sources, including sub-paths', () => {
-  assert.deepEqual(resolve('x.ts', '@superset-ui/core'), {
+test('workspace package aliases point at package sources, including sub-paths', () => {
+  assert.deepEqual(resolve('x.ts', '@sample-org/core'), {
     type: 'file',
-    target: 'packages/superset-ui-core/src/index.ts',
+    target: 'packages/sample-org-core/src/index.ts',
   });
-  assert.deepEqual(resolve('x.ts', '@superset-ui/core/query'), {
+  assert.deepEqual(resolve('x.ts', '@sample-org/core/query'), {
     type: 'file',
-    target: 'packages/superset-ui-core/src/query/index.ts',
+    target: 'packages/sample-org-core/src/query/index.ts',
   });
-  assert.deepEqual(resolve('x.ts', '@superset-ui/plugin-chart-table'), {
+  assert.deepEqual(resolve('x.ts', '@sample-org/plugin-chart-table'), {
     type: 'file',
     target: 'plugins/plugin-chart-table/src/index.ts',
   });
