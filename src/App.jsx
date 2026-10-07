@@ -74,12 +74,13 @@ export default function App() {
   const selectFile = useCallback(
     (path, { revealInTree = false, refocus = true } = {}) => {
       setSelected(path);
+      setShowPanel(true);
       if (refocus) setFocus(path);
       window.history.replaceState(null, '', `#${encodeURIComponent(path)}`);
       if (revealInTree) reveal(path);
       else if (refocus) setCenterTick(t => t + (mode === 'folders' ? 0 : 1));
     },
-    [reveal, mode],
+    [reveal, mode, setShowPanel],
   );
 
   // Deep links: reveal the file named in the URL once the graph has loaded,

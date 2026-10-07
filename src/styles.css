@@ -96,20 +96,61 @@ button:hover {
 }
 .header {
   display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.header h1 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+.header .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+.header .pill .muted {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.side-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.8rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.side-head h2 {
+  font-size: 0.8125rem;
+  margin: 0 0 0.4rem;
+  font-family: ui-monospace, Menlo, monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  direction: ltr;
+  text-align: left;
+}
 .side-head .close {
-  float: right;
-  margin-top: -2rem;
   background: transparent;
   border: 1px solid var(--border);
-  font-size: 1rem;
-  padding: 0.25rem 0.5rem;
+  font-size: 0.95rem;
+  padding: 0.18rem 0.45rem;
   border-radius: 8px;
   cursor: pointer;
+  flex: none;
 }
 .side-head .close:hover {
   color: var(--accent);
   border-color: var(--accent);
-}
 }
 .pill {
   background: var(--surface-2);
