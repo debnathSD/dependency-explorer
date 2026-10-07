@@ -5,7 +5,7 @@ files import each other. Built for frontend devs who want to answer
 "what does this file depend on?" and "what breaks if I change it?" without grepping.
 
 ```bash
-cd target-frontend/tools/dependency-explorer
+cd root
 npm install        # once; this tool has its own dependencies and is not part of the app's workspaces
 npm run dev        # http://localhost:5177   (PORT=xxxx npm run dev to change)
 ```
