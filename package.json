@@ -1,0 +1,29 @@
+{
+  "name": "superset-frontend-dependency-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Live, interactive tree of every file in superset-frontend and how they import each other.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "scan": "node server/cli.js",
+    "test": "node --test server/"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "chokidar": "^3.6.0",
+    "d3": "^7.9.0",
+    "highlight.js": "^11.10.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.0"
+  }
+}
