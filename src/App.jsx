@@ -43,6 +43,8 @@ export default function App() {
   const [panelWidth, setPanelWidth] = useState(() =>
     Math.round(window.innerWidth * 0.42),
   );
+  const [rootInput, setRootInput] = useState('');
+  const [showPanel, setShowPanel] = useState(true);
 
   const tree = useMemo(
     () => (model ? buildFolderTree(model, opts) : null),
@@ -234,6 +236,30 @@ export default function App() {
       <Header model={model} connected={connected} lastUpdate={lastUpdate} />
       <div className="toolbar">
         <Search model={model} onPick={pickFromSearch} />
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <input
+            type="text"
+            placeholder="Paste local path to explore"
+            value={rootInput}
+            onChange={e => setRootInput(e.target.value)}
+            style={{ width: 360 }}
+          />
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                const res = await fetch(`/api/set-root?root=${encodeURIComponent(rootInput)}`);
+                if (!res.ok) throw new Error(String(res.status));
+                // let SSE update the UI
+              } catch (err) {
+                console.error('set-root failed', err);
+                alert('Could not set root: ' + err.message);
+              }
+            }}
+          >
+            Open
+          </button>
+        </div>
         <div className="segmented" role="group" aria-label="Tree mode">
           {MODES.map(m => (
             <button
@@ -327,31 +353,47 @@ export default function App() {
           aria-orientation="vertical"
           onPointerDown={startResize}
         />
-        <aside
-          className="side"
-          style={{ width: panelWidth }}
-          aria-label="Selected file"
-        >
-          <div className="side-head">
-            <h2 title={selected}>
-              {selectedFile ? selectedFile.p : 'No file selected'}
-            </h2>
-            {selectedFile && (
-              <div role="tablist" className="tabs">
-                {tabs.map(t => (
-                  <button
-                    key={t.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={tab === t.id}
-                    onClick={() => setTab(t.id)}
-                  >
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+        {showPanel && (
+          <aside
+            className="side"
+            style={{ width: panelWidth }}
+            aria-label="Selected file"
+          >
+            <div className="side-head">
+              <h2 title={selected}>
+                {selectedFile ? selectedFile.p : 'No file selected'}
+              </h2>
+              <button
+                type="button"
+                className="close"
+                onClick={() => {
+                  setSelected(null);
+                  setFocus(null);
+                  setShowPanel(false);
+                  try {
+                    window.history.replaceState(null, '', window.location.pathname);
+                  } catch {}
+                }}
+                title="Close"
+              >
+                ✕
+              </button>
+              {selectedFile && (
+                <div role="tablist" className="tabs">
+                  {tabs.map(t => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={tab === t.id}
+                      onClick={() => setTab(t.id)}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           {selected && !selectedFile && (
             <div className="viewer-empty">
               {selected} is no longer in the project.
@@ -381,6 +423,7 @@ export default function App() {
             </div>
           )}
         </aside>
+        )}
       </main>
     </div>
   );

@@ -96,18 +96,20 @@ button:hover {
 }
 .header {
   display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  padding: 0.55rem 1rem;
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
-}
-.header h1 {
+.side-head .close {
+  float: right;
+  margin-top: -2rem;
+  background: transparent;
+  border: 1px solid var(--border);
   font-size: 1rem;
-  margin: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
 }
-.header .spacer {
-  flex: 1;
+.side-head .close:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
 }
 .pill {
   background: var(--surface-2);

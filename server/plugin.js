@@ -103,28 +103,74 @@ export default function dependencyExplorer() {
       };
       store.lastBranch = store.graph.branch;
 
-      const watcher = chokidar.watch(FRONTEND_ROOT, {
+      let watcher = null;
+      const createWatcher = root =>
+        chokidar.watch(root, {
         ignoreInitial: true,
-        ignored: p => {
-          const rel = path.relative(FRONTEND_ROOT, p).split(path.sep).join('/');
-          if (IGNORED_DIRS.test(rel)) return true;
-          // `.git` is ignored except HEAD/refs, which change on checkout/pull.
-          if (rel === '.git' || rel.startsWith('.git/')) {
-            return !(
-              rel === '.git' ||
-              /^\.git\/(HEAD|ORIG_HEAD|refs(\/.*)?)$/.test(rel)
-            );
-          }
-          return EXCLUDE_PREFIXES.some(prefix => `${rel}/`.startsWith(prefix));
-        },
-        usePolling: process.env.DEP_EXPLORER_POLL === '1',
-        awaitWriteFinish: { stabilityThreshold: 120, pollInterval: 40 },
-      });
+          ignored: p => {
+            const rel = path.relative(root, p).split(path.sep).join('/');
+            if (IGNORED_DIRS.test(rel)) return true;
+            if (rel === '.git' || rel.startsWith('.git/')) {
+              return !(
+                rel === '.git' ||
+                /^\.git\/(HEAD|ORIG_HEAD|refs(\/.*)?)$/.test(rel)
+              );
+            }
+            return EXCLUDE_PREFIXES.some(prefix => `${rel}/`.startsWith(prefix));
+          },
+          usePolling: process.env.DEP_EXPLORER_POLL === '1',
+          awaitWriteFinish: { stabilityThreshold: 120, pollInterval: 40 },
+        });
+      watcher = createWatcher(FRONTEND_ROOT);
       watcher.on('all', schedule);
       watcher.on('error', err =>
         server.config.logger.warn(`[deps] watcher: ${err.message}`),
       );
       server.httpServer?.on('close', () => watcher.close());
+
+      // allow clients to switch the scanned root at runtime
+      if (!server._setRootHandlerAdded) {
+        server._setRootHandlerAdded = true;
+        server.middlewares.use('/api', (req, res, next) => {
+          const url = new URL(req.url, 'http://localhost');
+          if (url.pathname === '/set-root') {
+            const newRoot = url.searchParams.get('root');
+            if (!newRoot) return sendJson(res, 400, { error: 'missing root' });
+            try {
+              const abs = path.resolve(newRoot);
+              store.root = abs;
+              const diff = store.sync();
+              // recreate watcher on the new root
+              try {
+                watcher.close();
+              } catch {}
+              watcher = createWatcher(abs);
+              watcher.on('all', schedule);
+              watcher.on('error', err =>
+                server.config.logger.warn(`[deps] watcher: ${err.message}`),
+              );
+              broadcast('update', {
+                version: store.graph.version,
+                graphChanged: true,
+                added: diff.added.slice(0, 500),
+                removed: diff.removed.slice(0, 500),
+                changed: diff.changed.slice(0, 500),
+                counts: {
+                  added: diff.added.length,
+                  removed: diff.removed.length,
+                  changed: diff.changed.length,
+                },
+                branch: store.graph.branch,
+                commit: store.graph.commit,
+              });
+              return sendJson(res, 200, { ok: true, root: store.root });
+            } catch (err) {
+              return sendJson(res, 500, { error: String(err) });
+            }
+          }
+          return next();
+        });
+      }
 
       // ---- HTTP API ----------------------------------------------------
       server.middlewares.use('/api', (req, res, next) => {
