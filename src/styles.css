@@ -183,7 +183,8 @@ button:hover {
   top: 3px;
   background: var(--panel);
   border-radius: 50%;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform 0.28s cubic-bezier(.2,.9,.2,1), background 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12) inset;
 }
 .theme-switch input:checked + .slider {
   background: var(--accent);
@@ -192,6 +193,43 @@ button:hover {
 .theme-switch input:checked + .slider:before {
   transform: translateX(20px);
   background: var(--on-accent);
+}
+
+/* Sun/moon visuals */
+.theme-switch .slider {
+  /* sky by default (light) */
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(240,245,255,0.6));
+  overflow: hidden;
+}
+.theme-switch .slider:after {
+  /* simple cloud accent on left */
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  width: 60px;
+  height: 20px;
+  background: radial-gradient(circle at 10px 8px, rgba(255,255,255,0.95) 0 8px, transparent 9px), radial-gradient(circle at 28px 10px, rgba(255,255,255,0.95) 0 8px, transparent 9px), radial-gradient(circle at 46px 8px, rgba(255,255,255,0.95) 0 8px, transparent 9px);
+  opacity: 0.9;
+  transition: opacity 0.2s ease, transform 0.28s cubic-bezier(.2,.9,.2,1);
+}
+.theme-switch input:checked + .slider {
+  background: linear-gradient(180deg, #0b1220 0%, #0a0c13 100%);
+}
+.theme-switch input:checked + .slider:after {
+  /* stars when dark */
+  left: auto;
+  right: 12px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle at 2px 2px, #fff 0 1px, transparent 2px), radial-gradient(circle at 6px 6px, rgba(255,255,255,0.9) 0 1px, transparent 2px);
+  transform: translateX(0);
+  opacity: 0.95;
+}
+.theme-switch input:checked + .slider:before {
+  /* moon with craters */
+  background: radial-gradient(circle at 8px 6px, #e6e6e6 0 6px, #cfcfcf 7px, transparent 8px), #f0f0f3;
 }
 
 .side-head {
