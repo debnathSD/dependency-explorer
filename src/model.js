@@ -88,7 +88,7 @@ export function neighbors(model, idx, direction, opts) {
 export function buildFolderTree(model, opts) {
   const root = {
     id: '',
-    name: 'superset-frontend',
+    name: 'root',
     isDir: true,
     children: [],
     parent: null,
